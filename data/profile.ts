@@ -1,0 +1,21 @@
+export const profile = {
+  name: 'Felman Eleponga',
+  username: '@felman.eleponga',
+  role: 'Patient Account',
+  active: true,
+  status: 'Active now',
+  email: 'felman.eleponga@email.com',
+  phone: '+63 912 345 6789',
+  location: 'Manila, Philippines',
+  joined: 'Member since January 2025',
+  bio: 'Keeping track of consultations, conversations, and follow-ups in one place.',
+  details: [
+    { label: 'Full name', value: 'Felman Eleponga', icon: 'person-outline' },
+    { label: 'Username', value: '@felman.eleponga', icon: 'at-outline' },
+    { label: 'Account status', value: 'Active now', icon: 'pulse-outline' },
+    { label: 'Email', value: 'felman.eleponga@email.com', icon: 'mail-outline' },
+    { label: 'Phone', value: '+63 912 345 6789', icon: 'call-outline' },
+    { label: 'Location', value: 'Manila, Philippines', icon: 'location-outline' },
+    { label: 'Joined', value: 'Member since January 2025', icon: 'calendar-outline' },
+  ] as const,
+};
