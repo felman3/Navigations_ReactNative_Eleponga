@@ -101,7 +101,7 @@ export default function ChatRoomScreen() {
     <>
       <Stack.Screen
         options={{
-          title: doctor.name,
+          title: 'Stack Navigation',
           headerBackVisible: false,
           headerLeft: () => <DrawerToggleButton tintColor={colors.text} />,
           headerTitleAlign: 'center',

@@ -15,6 +15,7 @@ export default function TabLayout() {
       screenOptions={{
         headerShown: true,
         headerLeft: () => <DrawerToggleButton tintColor={colors.text} />,
+        headerTitle: 'Stack Navigation',
         tabBarActiveTintColor: colors.tint,
         tabBarButton: HapticTab,
       }}>

@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
 import { Avatar } from '@/components/avatar';
 import { ThemedText } from '@/components/themed-text';
@@ -9,55 +9,107 @@ import { Colors } from '@/constants/theme';
 import { profile } from '@/data/profile';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
+const preferenceItems = [
+  { icon: 'notifications-outline', label: 'Notifications & Sounds', tint: '#EF4444' },
+  { icon: 'moon-outline', label: 'Dark Mode', tint: '#4B5563' },
+  { icon: 'cellular-outline', label: 'Data Saver', tint: '#22C55E' },
+] as const;
+
+const accountItems = [
+  { icon: 'person-outline', label: 'Account Settings', tint: '#9CA3AF' },
+  { icon: 'warning-outline', label: 'Report Technical Problem', tint: '#F59E0B' },
+  { icon: 'document-text-outline', label: 'Legal & Policies', tint: '#9CA3AF' },
+] as const;
+
+const profileItems = [
+  { icon: 'pulse-outline', label: profile.status, tint: '#16A34A' },
+  { icon: 'at-outline', label: profile.username, tint: '#4B5563' },
+] as const;
+
+function StaticRow({
+  icon,
+  label,
+  tint,
+  colors,
+}: {
+  icon: keyof typeof Ionicons.glyphMap;
+  label: string;
+  tint: string;
+  colors: { text: string; icon: string };
+}) {
+  return (
+    <View style={styles.optionRow}>
+      <View style={[styles.optionDot, { backgroundColor: tint }]} />
+      <ThemedText style={[styles.optionLabel, { color: colors.text }]}>{label}</ThemedText>
+      <Ionicons name={icon} size={18} color={colors.icon} />
+    </View>
+  );
+}
+
 export default function SettingsScreen() {
   const colorScheme = useColorScheme();
   const colors = Colors[colorScheme ?? 'light'];
 
   return (
     <ThemedView style={styles.container}>
-      <View style={[styles.hero, { borderColor: colors.icon + '22', backgroundColor: colors.icon + '10' }]}>
-        <Avatar name={profile.name} color={colors.tint} size={72} online={profile.active} />
-        <View style={styles.heroText}>
-          <View style={styles.nameRow}>
-            <ThemedText type="title">{profile.name}</ThemedText>
-            <View style={[styles.statusPill, { backgroundColor: profile.active ? '#1F8A4C' : '#8A8A8A' }]}>
-              <ThemedText style={styles.statusText}>{profile.status}</ThemedText>
+      <ScrollView
+        contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={false}
+        bounces>
+        <View style={[styles.headerCard, { borderColor: colors.icon + '22', backgroundColor: colors.icon + '10' }]}>
+          <View style={styles.headerTopRow}>
+            <View style={styles.avatarWrap}>
+              <Avatar name={profile.name} color={colors.tint} size={86} online={profile.active} />
+            </View>
+            <View style={styles.headerText}>
+              <ThemedText type="title">Profile</ThemedText>
+              <View style={styles.statusRow}>
+                <View style={[styles.statusPill, { backgroundColor: profile.active ? '#16A34A' : '#6B7280' }]}>
+                  <ThemedText style={styles.statusText}>{profile.status}</ThemedText>
+                </View>
+              </View>
+              <ThemedText style={[styles.username, { color: colors.icon }]}>{profile.username}</ThemedText>
             </View>
           </View>
-          <ThemedText style={[styles.username, { color: colors.icon }]}>{profile.username}</ThemedText>
-          <ThemedText style={[styles.role, { color: colors.text }]}>{profile.role}</ThemedText>
-          <ThemedText style={[styles.bio, { color: colors.icon }]}>{profile.bio}</ThemedText>
         </View>
-      </View>
 
-      <View style={styles.section}>
-        <ThemedText type="subtitle">Profile details</ThemedText>
-        <View style={styles.card}>
-          {profile.details.map((item, index) => (
-            <View
-              key={item.label}
-              style={[
-                styles.detailRow,
-                index !== profile.details.length - 1 && { borderBottomColor: colors.icon + '1F' },
-              ]}>
-              <View style={[styles.detailIcon, { backgroundColor: colors.tint + '18' }]}>
-                <Ionicons name={item.icon as keyof typeof Ionicons.glyphMap} size={18} color={colors.tint} />
-              </View>
-              <View style={styles.detailText}>
-                <ThemedText style={[styles.detailLabel, { color: colors.icon }]}>{item.label}</ThemedText>
-                <ThemedText style={styles.detailValue}>{item.value}</ThemedText>
-              </View>
-            </View>
-          ))}
+        <View style={styles.section}>
+          <ThemedText style={[styles.sectionLabel, { color: colors.icon }]}>Profile</ThemedText>
+          <View style={styles.optionList}>
+            {profileItems.map((item) => (
+              <StaticRow key={item.label} icon={item.icon} label={item.label} tint={item.tint} colors={colors} />
+            ))}
+          </View>
         </View>
-      </View>
 
-      <Pressable
-        style={[styles.accountButton, { backgroundColor: colors.tint }]}
-        onPress={() => router.push('/account')}>
-        <Ionicons name="open-outline" size={18} color="#fff" />
-        <ThemedText style={styles.accountButtonText}>Open full account</ThemedText>
-      </Pressable>
+        <View style={styles.section}>
+          <ThemedText style={[styles.sectionLabel, { color: colors.icon }]}>Preferences</ThemedText>
+          <View style={styles.optionList}>
+            {preferenceItems.map((item) => (
+              <StaticRow key={item.label} icon={item.icon} label={item.label} tint={item.tint} colors={colors} />
+            ))}
+          </View>
+        </View>
+
+        <View style={styles.section}>
+          <ThemedText style={[styles.sectionLabel, { color: colors.icon }]}>Account & Legal</ThemedText>
+          <View style={styles.optionList}>
+            {accountItems.map((item) => (
+              <StaticRow key={item.label} icon={item.icon} label={item.label} tint={item.tint} colors={colors} />
+            ))}
+          </View>
+        </View>
+
+        <View style={styles.section}>
+          <ThemedText style={[styles.sectionLabel, { color: colors.icon }]}>Navigation</ThemedText>
+          <Pressable
+            style={[styles.backButton, { borderColor: colors.icon + '28' }]}
+            onPress={() => router.push('/')}> 
+            <Ionicons name="chatbubbles-outline" size={18} color={colors.icon} />
+            <ThemedText style={[styles.backButtonText, { color: colors.text }]}>Back to chats</ThemedText>
+          </Pressable>
+        </View>
+      </ScrollView>
     </ThemedView>
   );
 }
@@ -65,93 +117,91 @@ export default function SettingsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  content: {
+    flexGrow: 1,
     padding: 16,
     gap: 18,
   },
-  hero: {
+  headerCard: {
     borderWidth: 1,
     borderRadius: 24,
-    padding: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 18,
+  },
+  headerTopRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 14,
+    gap: 16,
   },
-  heroText: {
+  avatarWrap: {
+    padding: 4,
+    overflow: 'visible',
+  },
+  headerText: {
     flex: 1,
-    gap: 4,
+    gap: 6,
   },
-  nameRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-    flexWrap: 'wrap',
+  username: {
+    fontSize: 13,
+  },
+  statusRow: {
+    marginTop: 4,
   },
   statusPill: {
     paddingHorizontal: 10,
-    paddingVertical: 4,
+    paddingVertical: 5,
     borderRadius: 999,
+    alignSelf: 'flex-start',
   },
   statusText: {
     color: '#fff',
     fontSize: 12,
     fontWeight: '700',
   },
-  username: {
-    fontSize: 14,
-  },
-  role: {
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  bio: {
-    fontSize: 13,
-    lineHeight: 18,
-    marginTop: 2,
-  },
   section: {
     gap: 10,
   },
-  card: {
+  sectionLabel: {
+    fontSize: 12,
+    fontWeight: '700',
+    textTransform: 'uppercase',
+    letterSpacing: 0.8,
+  },
+  optionList: {
     borderRadius: 20,
     overflow: 'hidden',
     borderWidth: 1,
     borderColor: 'rgba(128,128,128,0.15)',
   },
-  detailRow: {
+  optionRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
-    paddingHorizontal: 14,
-    paddingVertical: 13,
+    gap: 14,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
     borderBottomWidth: 1,
+    borderBottomColor: 'rgba(128,128,128,0.14)',
   },
-  detailIcon: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    alignItems: 'center',
-    justifyContent: 'center',
+  optionDot: {
+    width: 14,
+    height: 14,
+    borderRadius: 7,
   },
-  detailText: {
+  optionLabel: {
     flex: 1,
-    gap: 2,
   },
-  detailLabel: {
-    fontSize: 12,
-  },
-  detailValue: {
-    fontSize: 15,
-  },
-  accountButton: {
+  backButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 10,
     borderRadius: 16,
     paddingVertical: 14,
+    borderWidth: 1,
+    backgroundColor: 'transparent',
   },
-  accountButtonText: {
-    color: '#fff',
+  backButtonText: {
     fontSize: 16,
     fontWeight: '700',
   },

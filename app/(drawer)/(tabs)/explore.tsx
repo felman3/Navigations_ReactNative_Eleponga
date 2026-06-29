@@ -28,16 +28,6 @@ export default function ExploreScreen() {
 
   return (
     <ThemedView style={styles.container}>
-      <View style={styles.headerShell}>
-        <View style={styles.headerTop}>
-          <View style={styles.headerMenuButton}>
-            <Ionicons name="menu" size={18} color="#fff" />
-          </View>
-          <ThemedText style={styles.headerTitle}>Stack Navigation</ThemedText>
-          <View style={styles.headerSpacer} />
-        </View>
-      </View>
-
       <View style={styles.searchSection}>
         <View style={[styles.searchBar, { backgroundColor: colors.icon + '16', borderColor: colors.icon + '18' }]}> 
           <Ionicons name="search" size={18} color={colors.icon} />
@@ -94,33 +84,6 @@ export default function ExploreScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  headerShell: {
-    backgroundColor: '#7A22C8',
-    paddingTop: 10,
-    paddingBottom: 12,
-    paddingHorizontal: 14,
-  },
-  headerTop: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: 10,
-  },
-  headerMenuButton: {
-    width: 30,
-    height: 30,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  headerSpacer: {
-    width: 30,
-    height: 30,
-  },
-  headerTitle: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: '700',
   },
   searchSection: {
     paddingHorizontal: 16,
